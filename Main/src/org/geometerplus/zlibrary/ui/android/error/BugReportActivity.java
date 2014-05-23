@@ -49,14 +49,14 @@ public class BugReportActivity extends Activity implements ErrorKeys {
 		reportTextView.setLongClickable(false);
 
 		final String versionName = new ErrorUtil(this).getVersionName();
-		reportTextView.append("FBReader " + versionName + " has been crached, sorry. You can help to fix this bug by sending the report below to FBReader developers. The report will be sent by e-mail. Thank you in advance!\n\n");
+		reportTextView.append("抱歉！ 应用 " + getPackageName() + " 挂了！ 如果愿意，您可以发送邮件来协助解决这个问题。\n\n");
 		reportTextView.append(reportText);
 
 		findViewById(R.id.send_report).setOnClickListener(
 			new View.OnClickListener() {
 				public void onClick(View view) {
 					Intent sendIntent = new Intent(Intent.ACTION_SEND);
-					sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "exception@geometerplus.com" });
+					sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { "wtjoy365@gmail.com" });
 					sendIntent.putExtra(Intent.EXTRA_TEXT, reportText.toString());
 					sendIntent.putExtra(Intent.EXTRA_SUBJECT, "FBReader " + versionName + " exception report");
 					sendIntent.setType("message/rfc822");
