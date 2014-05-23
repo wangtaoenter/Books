@@ -49,11 +49,14 @@
 				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</service>
-		<activity android:name="org.geometerplus.android.fbreader.FBReader" android:launchMode="singleTask" android:icon="@drawable/fbreader" android:label="FBReader" android:theme="@style/FBReader.Activity" android:configChanges="orientation|keyboardHidden|screenSize">
-			<intent-filter>
+		<activity android:name="org.geometerplus.android.fbreader.EntryActivity" android:launchMode="singleTask" android:icon="@drawable/fbreader"
+		    android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+		    <intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
+		</activity>
+		<activity android:name="org.geometerplus.android.fbreader.FBReader" android:launchMode="singleTask" android:icon="@drawable/fbreader" android:label="FBReader" android:theme="@style/FBReader.Activity" android:configChanges="orientation|keyboardHidden|screenSize">
 			<intent-filter>
 				<action android:name="android.fbreader.action.VIEW"/>
 				<category android:name="android.intent.category.DEFAULT"/>
