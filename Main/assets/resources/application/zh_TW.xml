@@ -716,12 +716,12 @@
 				<node name="summaryOff" value="不要顯示前三個位置"/>
 			</node>
 			<node name="backKeyAction" value="返回鍵動作">
-				<node name="exit" value="關閉 FBReader"/>
+				<node name="exit" value="退出"/>
 				<node name="goBack" value="返回"/>
 				<node name="cancelMenu" value="顯示取消選單"/>
 			</node>
 			<node name="backKeyLongPressAction" value="長按返回鍵動作">
-				<node name="exit" value="關閉 FBReader"/>
+				<node name="exit" value="退出"/>
 				<node name="goBack" value="返回"/>
 				<node name="cancelMenu" value="顯示取消選單"/>
 				<node name="none" value="無動作"/>
