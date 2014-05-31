@@ -22,46 +22,65 @@ package org.geometerplus.android.fbreader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import android.app.Activity;
-import android.app.SearchManager;
-import android.content.*;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.PowerManager;
-import android.view.*;
-import android.widget.RelativeLayout;
-
+import org.geometerplus.android.fbreader.api.ApiListener;
+import org.geometerplus.android.fbreader.api.ApiServerImplementation;
+import org.geometerplus.android.fbreader.api.FBReaderIntents;
+import org.geometerplus.android.fbreader.api.MenuNode;
+import org.geometerplus.android.fbreader.api.PluginApi;
+import org.geometerplus.android.fbreader.httpd.DataService;
+import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
+import org.geometerplus.android.fbreader.tips.TipsActivity;
+import org.geometerplus.android.util.DeviceType;
+import org.geometerplus.android.util.SearchDialogUtil;
+import org.geometerplus.android.util.UIUtil;
+import org.geometerplus.fbreader.book.Book;
+import org.geometerplus.fbreader.book.Bookmark;
+import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.fbreader.ActionCode;
+import org.geometerplus.fbreader.fbreader.FBReaderApp;
+import org.geometerplus.fbreader.fbreader.options.CancelMenuHelper;
+import org.geometerplus.fbreader.tips.TipsManager;
 import org.geometerplus.zlibrary.core.application.ZLApplicationWindow;
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.library.ZLibrary;
 import org.geometerplus.zlibrary.core.options.Config;
 import org.geometerplus.zlibrary.core.resources.ZLResource;
 import org.geometerplus.zlibrary.core.view.ZLViewWidget;
-
 import org.geometerplus.zlibrary.text.view.ZLTextView;
-
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.error.ErrorKeys;
-import org.geometerplus.zlibrary.ui.android.library.*;
+import org.geometerplus.zlibrary.ui.android.library.UncaughtExceptionHandler;
+import org.geometerplus.zlibrary.ui.android.library.ZLAndroidApplication;
+import org.geometerplus.zlibrary.ui.android.library.ZLAndroidLibrary;
 import org.geometerplus.zlibrary.ui.android.view.AndroidFontUtil;
 import org.geometerplus.zlibrary.ui.android.view.ZLAndroidWidget;
 
-import org.geometerplus.fbreader.book.*;
-import org.geometerplus.fbreader.bookmodel.BookModel;
-import org.geometerplus.fbreader.fbreader.*;
-import org.geometerplus.fbreader.fbreader.options.CancelMenuHelper;
-import org.geometerplus.fbreader.tips.TipsManager;
-
-import org.geometerplus.android.fbreader.api.*;
-import org.geometerplus.android.fbreader.httpd.DataService;
-import org.geometerplus.android.fbreader.library.BookInfoActivity;
-import org.geometerplus.android.fbreader.libraryService.BookCollectionShadow;
-import org.geometerplus.android.fbreader.tips.TipsActivity;
-
-import org.geometerplus.android.util.*;
+import android.app.Activity;
+import android.app.SearchManager;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.PowerManager;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import cn.waps.AppConnect;
 
 public final class FBReader extends Activity implements ZLApplicationWindow {
 	static final int ACTION_BAR_COLOR = Color.DKGRAY;
@@ -90,6 +109,7 @@ public final class FBReader extends Activity implements ZLApplicationWindow {
 
 	private RelativeLayout myRootView;
 	private ZLAndroidWidget myMainView;
+	private LinearLayout adsLayout;
 
 	private volatile boolean myShowStatusBarFlag;
 	private String myMenuLanguage;
@@ -221,6 +241,10 @@ public final class FBReader extends Activity implements ZLApplicationWindow {
 		myRootView = (RelativeLayout)findViewById(R.id.root_view);
 		myMainView = (ZLAndroidWidget)findViewById(R.id.main_view);
 		setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+		
+		//TODO ads
+		adsLayout = (LinearLayout)findViewById(R.id.main_bottom);
+		AppConnect.getInstance(this).showBannerAd(this, adsLayout);
 
 		zlibrary.setActivity(this);
 

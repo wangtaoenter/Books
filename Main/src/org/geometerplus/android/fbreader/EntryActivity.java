@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import cn.waps.AppConnect;
 
 public class EntryActivity extends Activity {
 	
@@ -37,5 +38,7 @@ public class EntryActivity extends Activity {
 		setContentView(R.layout.entry);
 		entryView = findViewById(R.id.entry_view);
 		entryView.setOnClickListener(onClickListener);
+		
+		AppConnect.getInstance("8ba3d692f2b95cdcfd65adc0f7b5c111","google",this);
 	}
 }
