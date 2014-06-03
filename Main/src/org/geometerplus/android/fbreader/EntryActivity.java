@@ -40,5 +40,7 @@ public class EntryActivity extends Activity {
 		entryView.setOnClickListener(onClickListener);
 		
 		AppConnect.getInstance("8ba3d692f2b95cdcfd65adc0f7b5c111","google",this);
+		AppConnect.getInstance(this).initPopAd(this);
+		AppConnect.getInstance(this).showPopAd(this);
 	}
 }
