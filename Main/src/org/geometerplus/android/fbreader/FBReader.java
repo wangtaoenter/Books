@@ -629,7 +629,7 @@ public final class FBReader extends Activity implements ZLApplicationWindow {
 				return;
 			}
 		}
-		myFBReaderApp.runCancelAction(type, bookmark);
+		myFBReaderApp.runCancelAction(this,type, bookmark);
 	}
 
 	public void navigate() {

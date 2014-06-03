@@ -50,7 +50,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 	private final Comparator<Bookmark> myComparator = new Bookmark.ByTimeComparator();
 
 	private volatile BookmarksAdapter myThisBookAdapter;
-	private volatile BookmarksAdapter myAllBooksAdapter;
+	//private volatile BookmarksAdapter myAllBooksAdapter;
 	private volatile BookmarksAdapter mySearchResultsAdapter;
 
 	private final ZLResource myResource = ZLResource.resource("bookmarksView");
@@ -92,7 +92,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 						break;
 					}
 					myThisBookAdapter.addAll(thisBookBookmarks);
-					myAllBooksAdapter.addAll(thisBookBookmarks);
+					//myAllBooksAdapter.addAll(thisBookBookmarks);
 				}
 			}
 			for (BookmarkQuery query = new BookmarkQuery(20); ; query = query.next()) {
@@ -100,7 +100,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 				if (allBookmarks.isEmpty()) {
 					break;
 				}
-				myAllBooksAdapter.addAll(allBookmarks);
+				//.addAll(allBookmarks);
 			}
 			runOnUiThread(new Runnable() {
 				public void run() {
@@ -122,7 +122,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 
 		myCollection.bindToService(this, new Runnable() {
 			public void run() {
-				if (myAllBooksAdapter != null) {
+				if (myThisBookAdapter != null) {
 					return;
 				}
 
@@ -133,9 +133,11 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 				} else {
 					findViewById(R.id.this_book).setVisibility(View.GONE);
 				}
-				myAllBooksAdapter = new BookmarksAdapter(
-					createTab("allBooks", R.id.all_books), false
-				);
+				//TODO 隐藏所有图书书签
+//				myAllBooksAdapter = new BookmarksAdapter(
+//					createTab("allBooks", R.id.all_books), false
+//				);
+				findViewById(R.id.all_books).setVisibility(View.GONE);
 				findViewById(R.id.search_results).setVisibility(View.GONE);
 
 				new Thread(new Initializer()).start();
@@ -157,11 +159,11 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 
 		final LinkedList<Bookmark> bookmarks = new LinkedList<Bookmark>();
 		pattern = pattern.toLowerCase();
-		for (Bookmark b : myAllBooksAdapter.bookmarks()) {
-			if (MiscUtil.matchesIgnoreCase(b.getText(), pattern)) {
-				bookmarks.add(b);
-			}
-		}
+//		for (Bookmark b : myAllBooksAdapter.bookmarks()) {
+//			if (MiscUtil.matchesIgnoreCase(b.getText(), pattern)) {
+//				bookmarks.add(b);
+//			}
+//		}
 		if (!bookmarks.isEmpty()) {
 			showSearchResultsTab(bookmarks);
 		} else {
@@ -238,9 +240,9 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 				if (myThisBookAdapter != null) {
 					myThisBookAdapter.remove(bookmark);
 				}
-				if (myAllBooksAdapter != null) {
-					myAllBooksAdapter.remove(bookmark);
-				}
+//				if (myAllBooksAdapter != null) {
+//					myAllBooksAdapter.remove(bookmark);
+//				}
 				if (mySearchResultsAdapter != null) {
 					mySearchResultsAdapter.remove(bookmark);
 				}
@@ -254,7 +256,7 @@ public class BookmarksActivity extends TabActivity implements MenuItem.OnMenuIte
 		if (bookmark != null) {
 			myCollection.saveBookmark(bookmark);
 			myThisBookAdapter.add(bookmark);
-			myAllBooksAdapter.add(bookmark);
+			//myAllBooksAdapter.add(bookmark);
 		}
 	}
 

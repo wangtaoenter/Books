@@ -19,24 +19,42 @@
 
 package org.geometerplus.fbreader.fbreader;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.geometerplus.zlibrary.core.application.*;
-import org.geometerplus.zlibrary.core.drm.FileEncryptionInfo;
+import org.geometerplus.fbreader.book.Author;
+import org.geometerplus.fbreader.book.Book;
+import org.geometerplus.fbreader.book.BookEvent;
+import org.geometerplus.fbreader.book.BookUtil;
+import org.geometerplus.fbreader.book.Bookmark;
+import org.geometerplus.fbreader.book.BookmarkQuery;
+import org.geometerplus.fbreader.book.IBookCollection;
+import org.geometerplus.fbreader.bookmodel.BookModel;
+import org.geometerplus.fbreader.bookmodel.BookReadingException;
+import org.geometerplus.fbreader.bookmodel.TOCTree;
+import org.geometerplus.fbreader.fbreader.options.CancelMenuHelper;
+import org.geometerplus.fbreader.fbreader.options.ColorProfile;
+import org.geometerplus.fbreader.fbreader.options.ImageOptions;
+import org.geometerplus.fbreader.fbreader.options.MiscOptions;
+import org.geometerplus.fbreader.fbreader.options.PageTurningOptions;
+import org.geometerplus.fbreader.fbreader.options.ViewOptions;
+import org.geometerplus.zlibrary.core.application.ZLApplication;
+import org.geometerplus.zlibrary.core.application.ZLKeyBindings;
 import org.geometerplus.zlibrary.core.drm.EncryptionMethod;
-import org.geometerplus.zlibrary.core.library.ZLibrary;
-import org.geometerplus.zlibrary.core.options.*;
-import org.geometerplus.zlibrary.core.resources.ZLResource;
-import org.geometerplus.zlibrary.core.util.*;
-
+import org.geometerplus.zlibrary.core.drm.FileEncryptionInfo;
+import org.geometerplus.zlibrary.core.util.MiscUtil;
+import org.geometerplus.zlibrary.core.util.RationalNumber;
 import org.geometerplus.zlibrary.text.hyphenation.ZLTextHyphenator;
 import org.geometerplus.zlibrary.text.model.ZLTextModel;
-import org.geometerplus.zlibrary.text.view.*;
+import org.geometerplus.zlibrary.text.view.ZLTextFixedPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextPosition;
+import org.geometerplus.zlibrary.text.view.ZLTextView;
+import org.geometerplus.zlibrary.text.view.ZLTextWordCursor;
 
-import org.geometerplus.fbreader.book.*;
-import org.geometerplus.fbreader.bookmodel.*;
-import org.geometerplus.fbreader.fbreader.options.*;
-import org.geometerplus.fbreader.formats.FormatPlugin;
+import android.content.Context;
+import cn.waps.AppConnect;
 
 public final class FBReaderApp extends ZLApplication {
 	public final MiscOptions MiscOptions = new MiscOptions();
@@ -432,7 +450,7 @@ public final class FBReaderApp extends ZLApplication {
 		return new CancelMenuHelper().getActionsList(Collection).size() > 1;
 	}
 
-	public void runCancelAction(CancelMenuHelper.ActionType type, Bookmark bookmark) {
+	public void runCancelAction(Context context,CancelMenuHelper.ActionType type, Bookmark bookmark) {
 		switch (type) {
 			case library:
 				runAction(ActionCode.SHOW_LIBRARY);
@@ -449,6 +467,7 @@ public final class FBReaderApp extends ZLApplication {
 				break;
 			case close:
 				closeWindow();
+				AppConnect.getInstance(context).close();
 				break;
 		}
 	}
